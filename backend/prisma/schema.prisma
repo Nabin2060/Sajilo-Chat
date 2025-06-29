@@ -22,4 +22,6 @@ model User {
   image     String?
   oauth     String
   create_at DateTime @default(now())
+
+  @@map("users")
 }
