@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from "express";
 import dotenv from "dotenv";
 
 import userRouter from "./routes/userRoute";
+import chatGroupRouter from "./routes/chatGroupRoute";
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // routes
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/group", chatGroupRouter);
 
 app.listen(PORT, () => {
   console.log(`Application running on Port ${PORT}`);

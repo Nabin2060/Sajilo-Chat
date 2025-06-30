@@ -8,6 +8,7 @@ const page = async () => {
   const session: CustomSession | null = await getServerSession(authOption);
   return (
     <div>
+      <p>{JSON.stringify(session)}</p>
       <DashNav
         name={session?.user?.name as string}
         image={session?.user?.image ?? undefined}

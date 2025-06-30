@@ -9,3 +9,5 @@ declare namespace Express {
     user?: AuthUser;
   }
 }
+
+// export {};

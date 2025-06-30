@@ -21,5 +21,16 @@ const router = Router();
 router.post("/group-chat", authMiddleware, async (req, res, next) => {
   await ChatGroupController.store(req, res, next);
 });
-
+router.get("/all-group", authMiddleware, async (req, res, next) => {
+  await ChatGroupController.index(req, res, next);
+});
+router.get("/all-group/:id", authMiddleware, async (req, res, next) => {
+  await ChatGroupController.show(req, res, next);
+});
+router.put("/all-group/:id", authMiddleware, async (req, res, next) => {
+  await ChatGroupController.update(req, res, next);
+});
+router.delete("/all-group/:id", authMiddleware, async (req, res, next) => {
+  await ChatGroupController.delete(req, res, next);
+});
 export default router;
