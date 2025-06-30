@@ -12,12 +12,12 @@ app.get("/", (req: Request, res: Response) => {
   res.status(200).json({ message: "hamro chat application..." });
 });
 
-//middle
+//middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // routes
-app.use("/api/v1",userRouter);
+app.use("/api/v1/user", userRouter);
 
 app.listen(PORT, () => {
   console.log(`Application running on Port ${PORT}`);

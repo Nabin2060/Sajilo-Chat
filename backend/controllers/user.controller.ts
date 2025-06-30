@@ -21,7 +21,14 @@ class UserController {
       });
       if (!user) {
         user = await prisma.user.create({
-          data: body
+          // data: body
+          data: {
+            email: body.email,
+            name: body.name,
+            oauth: body.oauth,
+            image: body.image || null,
+            provider: body.provider // ✅ actual string value
+          }
         });
       }
       const JWTPayload = {
