@@ -1,12 +1,25 @@
 import express, { Application, Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import { createServer } from "http";
+import { Server } from "socket.io";
 import userRouter from "./routes/userRoute";
 import chatGroupRouter from "./routes/chatGroupRoute";
+import { setupSocket } from "./socket";
 
 dotenv.config();
-
 const app: Application = express();
+
+const server = createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*"
+  }
+});
+
+setupSocket(io);
+export default { io };
+
 const PORT = process.env.PORT || 1000;
 
 app.get("/", (req: Request, res: Response) => {
@@ -14,7 +27,6 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 //middleware
-// app.use(cors());
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -23,6 +35,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/group", chatGroupRouter);
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Application running on Port ${PORT}`);
 });
