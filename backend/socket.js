@@ -5,6 +5,7 @@ function setupSocket(io) {
     io.on("connnection", (socket) => {
         console.log("The socket connected...", socket.id);
         socket.on("message", (data) => {
+            // console.log("hello");
             console.log("Server side message", data);
             // socket.emit("message", data);
             socket.broadcast.emit("message", data);

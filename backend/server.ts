@@ -6,6 +6,9 @@ import { Server } from "socket.io";
 import userRouter from "./routes/userRoute";
 import chatGroupRouter from "./routes/chatGroupRoute";
 import { setupSocket } from "./socket";
+import { createAdapter } from "@socket.io/redis-streams-adapter";
+import radis from "./config/radis.config";
+const { instrument } = require("@socket.io/admin-ui");
 
 dotenv.config();
 const app: Application = express();
@@ -13,8 +16,15 @@ const app: Application = express();
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*"
-  }
+    origin: ["http://localhost:3000", "https://admin.socket.io"],
+    credentials: true
+  },
+  adapter: createAdapter(radis)
+});
+
+instrument(io, {
+  auth: false,
+  mode: "development"
 });
 
 setupSocket(io);

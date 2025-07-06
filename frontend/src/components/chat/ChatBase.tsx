@@ -26,8 +26,9 @@ export default function ChatBase() {
   }, [socket]);
 
   const handleClick = () => {
-    // console.log("message" + uuidv4());
+    // console.log("clicking.." + uuidv4());
     socket.emit("message", { name: "ram", id: uuidv4() });
+    console.log("clickiing..." + uuidv4());
   };
 
   return (

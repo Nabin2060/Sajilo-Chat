@@ -11,13 +11,22 @@ const socket_io_1 = require("socket.io");
 const userRoute_1 = __importDefault(require("./routes/userRoute"));
 const chatGroupRoute_1 = __importDefault(require("./routes/chatGroupRoute"));
 const socket_1 = require("./socket");
+const redis_streams_adapter_1 = require("@socket.io/redis-streams-adapter");
+const radis_config_1 = __importDefault(require("./config/radis.config"));
+const { instrument } = require("@socket.io/admin-ui");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const server = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(server, {
     cors: {
-        origin: "*"
-    }
+        origin: ["http://localhost/3000", "https://admin.socket.io"],
+        credentials: true
+    },
+    adapter: (0, redis_streams_adapter_1.createAdapter)(radis_config_1.default)
+});
+instrument(io, {
+    auth: false,
+    mode: "development"
 });
 (0, socket_1.setupSocket)(io);
 exports.default = { io };
