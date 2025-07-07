@@ -13,13 +13,15 @@ const chatGroupRoute_1 = __importDefault(require("./routes/chatGroupRoute"));
 const socket_1 = require("./socket");
 const redis_streams_adapter_1 = require("@socket.io/redis-streams-adapter");
 const radis_config_1 = __importDefault(require("./config/radis.config"));
+const kafka_config_1 = require("./config/kafka.config");
+const helper_1 = require("./helper");
 const { instrument } = require("@socket.io/admin-ui");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const server = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(server, {
     cors: {
-        origin: ["http://localhost/3000", "https://admin.socket.io"],
+        origin: ["http://localhost:3000", "https://admin.socket.io"],
         credentials: true
     },
     adapter: (0, redis_streams_adapter_1.createAdapter)(radis_config_1.default)
@@ -41,6 +43,10 @@ app.use(express_1.default.urlencoded({ extended: false }));
 // routes
 app.use("/api/v1/user", userRoute_1.default);
 app.use("/api/v1/group", chatGroupRoute_1.default);
+(0, kafka_config_1.connectedKafkaProducer)().catch((error) => {
+    console.log(`something went wrong while connecting kafka...`);
+});
+(0, helper_1.consumeMessages)(process.env.KAFKA_TOPIC || "chats").catch((err) => console.log("The consumer error is", err));
 server.listen(PORT, () => {
     console.log(`Application running on Port ${PORT}`);
 });

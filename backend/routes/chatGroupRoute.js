@@ -25,6 +25,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const chat_group_controller_1 = __importDefault(require("../controllers/chat.group.controller"));
 const AuthMiddlewares_1 = __importDefault(require("../middlewares/AuthMiddlewares"));
+const chat_group_user_controller_1 = __importDefault(require("../controllers/chat.group.user.controller"));
+const chats_controller_1 = __importDefault(require("../controllers/chats.controller"));
 const router = (0, express_1.Router)();
 router.post("/group-chat", AuthMiddlewares_1.default, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     yield chat_group_controller_1.default.store(req, res, next);
@@ -32,7 +34,7 @@ router.post("/group-chat", AuthMiddlewares_1.default, (req, res, next) => __awai
 router.get("/all-group", AuthMiddlewares_1.default, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     yield chat_group_controller_1.default.index(req, res, next);
 }));
-router.get("/all-group/:id", AuthMiddlewares_1.default, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/all-group/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     yield chat_group_controller_1.default.show(req, res, next);
 }));
 router.put("/all-group/:id", AuthMiddlewares_1.default, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -40,5 +42,19 @@ router.put("/all-group/:id", AuthMiddlewares_1.default, (req, res, next) => __aw
 }));
 router.delete("/all-group/:id", AuthMiddlewares_1.default, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     yield chat_group_controller_1.default.delete(req, res, next);
+}));
+//
+router.get("/chat-group-users", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield chat_group_user_controller_1.default.index(req, res);
+}));
+router.post("/chat-group-users", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield chat_group_user_controller_1.default.store(req, res);
+}));
+router.get("/group-chat/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    yield chat_group_controller_1.default.show(req, res, next);
+}));
+// chats
+router.get("/chats/:groupId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield chats_controller_1.default.index(req, res);
 }));
 exports.default = router;

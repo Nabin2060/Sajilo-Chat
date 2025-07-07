@@ -8,6 +8,9 @@ import chatGroupRouter from "./routes/chatGroupRoute";
 import { setupSocket } from "./socket";
 import { createAdapter } from "@socket.io/redis-streams-adapter";
 import radis from "./config/radis.config";
+import { connectedKafkaProducer } from "./config/kafka.config";
+import { error } from "console";
+import { consumeMessages } from "./helper";
 const { instrument } = require("@socket.io/admin-ui");
 
 dotenv.config();
@@ -44,6 +47,13 @@ app.use(express.urlencoded({ extended: false }));
 // routes
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/group", chatGroupRouter);
+
+connectedKafkaProducer().catch((error) => {
+  console.log(`something went wrong while connecting kafka...`);
+});
+consumeMessages(process.env.KAFKA_TOPIC || "chats").catch((err) =>
+  console.log("The consumer error is", err)
+);
 
 server.listen(PORT, () => {
   console.log(`Application running on Port ${PORT}`);
